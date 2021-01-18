@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDT.Boss.ServiceName.Api", "src\IDT.Boss.ServiceName.Api\IDT.Boss.ServiceName.Api.csproj", "{F98ED69A-9575-4A09-B057-B4777D1CEA2B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{71B651C8-3952-45CE-88EE-FA92ACC91260}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{266B464D-79A9-442F-A321-844DA6BDB1F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDT.Boss.ServiceName.Tests", "tests\IDT.Boss.ServiceName.Tests\IDT.Boss.ServiceName.Tests.csproj", "{77FCE971-EFEA-4136-8BAD-FA04028644B9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F98ED69A-9575-4A09-B057-B4777D1CEA2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F98ED69A-9575-4A09-B057-B4777D1CEA2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F98ED69A-9575-4A09-B057-B4777D1CEA2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F98ED69A-9575-4A09-B057-B4777D1CEA2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77FCE971-EFEA-4136-8BAD-FA04028644B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77FCE971-EFEA-4136-8BAD-FA04028644B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77FCE971-EFEA-4136-8BAD-FA04028644B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77FCE971-EFEA-4136-8BAD-FA04028644B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F98ED69A-9575-4A09-B057-B4777D1CEA2B} = {71B651C8-3952-45CE-88EE-FA92ACC91260}
+		{77FCE971-EFEA-4136-8BAD-FA04028644B9} = {266B464D-79A9-442F-A321-844DA6BDB1F0}
+	EndGlobalSection
+EndGlobal

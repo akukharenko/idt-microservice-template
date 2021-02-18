@@ -1,12 +1,15 @@
 # Boss Sample Service - Template
 
 Service short description
+TBD
 
 ## Description
 
 Full description
+TBD
 
 ## Environments
+
 * Development (Scrum Master Environment): [link here]
 * QA (Scrum RC-QA Environment): [link here]
 * UAT (Waiting to implement step on pipeline): [link here]
@@ -14,7 +17,7 @@ Full description
 
 ## Jenkins
 
-http://jenkins.idt.net:8080/job/Boss/job/rcs/job/boss-combo-service/
+TBD
 
 ## Build Process for Local Development
 
@@ -23,6 +26,7 @@ http://jenkins.idt.net:8080/job/Boss/job/rcs/job/boss-combo-service/
 
 ## Infrastructure Diagram
 
+TBD
 
 ## Wiki Info
 

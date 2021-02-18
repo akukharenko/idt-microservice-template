@@ -8,3 +8,6 @@ name: idt.boss.servicename
 services:
 - name: idt-boss-servicename-api
   project: src/IDT.Boss.ServiceName.Api/IDT.Boss.ServiceName.Api.csproj
+  env:
+    - name: ASPNETCORE_ENVIRONMENT
+      value: Local

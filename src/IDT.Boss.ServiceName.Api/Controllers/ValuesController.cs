@@ -8,7 +8,8 @@ namespace IDT.Boss.ServiceName.Api.Controllers
     /// Sample controller to work with test values.
     /// </summary>
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     [SwaggerTag("Sample values controller")]
     public sealed class ValuesController : ControllerBase
     {
@@ -33,7 +34,7 @@ namespace IDT.Boss.ServiceName.Api.Controllers
         [Route("{index}")]
         public ActionResult<string> GetValue(int index)
         {
-            if (_values.Length < index - 1)
+            if (index >= _values.Length)
             {
                 return NotFound();
             }

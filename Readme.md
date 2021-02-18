@@ -1,13 +1,29 @@
-# Boss Sample service template
+# Boss Sample Service - Template
 
-Base file with input point for the documentation and description of the projects in the repository.
+Service short description
 
-Here can be added:
+## Description
 
-1. Project description
-2. Tech stack.
-3. Team.
-4. How to work and settings started (run, build, tools, configuration and etc.).
-5. Other information.
+Full description
 
-Note that ths file can bу as part of the whole documentation (in the docs folder here or in Confluence). Ideally make sure that all links here to the resources is also added.
+## Environments
+* Development (Scrum Master Environment): [link here]
+* QA (Scrum RC-QA Environment): [link here]
+* UAT (Waiting to implement step on pipeline): [link here]
+* Prod (Waiting to implement step on pipeline): [link here]
+
+## Jenkins
+
+http://jenkins.idt.net:8080/job/Boss/job/rcs/job/boss-combo-service/
+
+## Build Process for Local Development
+
+* You have Docker installed
+* You have .NET 5 installed (SDK and runtime)
+
+## Infrastructure Diagram
+
+
+## Wiki Info
+
+The home page for the application details: [link here]

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.Json.Serialization;
 using IDT.Boss.ServiceName.Api.Infrastructure.Configuration;
+using IDT.Boss.ServiceName.Api.Infrastructure.HealthCheck;
 using IDT.Boss.ServiceName.Api.Infrastructure.Swagger;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -82,7 +83,8 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
             services.ConfigureSwaggerGeneration();
 
             // add health checks (default)
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+                .AddAppOptics();
 
             return services;
         }

@@ -1,3 +1,4 @@
+using AppOptics.Instrumentation;
 using IDT.Boss.ServiceName.Api.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,6 +42,9 @@ namespace IDT.Boss.ServiceName.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // add SolarWinds AppOptics monitoring
+            app.UseAppopticsApm();
 
             // configure Swagger UI
             app.ConfigureSwagger(apiProvider);

@@ -5,6 +5,11 @@
 #    https://aka.ms/AA7q20u
 #
 name: idt.boss.servicename
+
+extensions:
+- name: seq
+  logPath: ./.logs
+
 services:
 - name: idt-boss-servicename-api
   project: src/IDT.Boss.ServiceName.Api/IDT.Boss.ServiceName.Api.csproj

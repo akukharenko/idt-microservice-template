@@ -1,13 +1,22 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
+using Hellang.Middleware.ProblemDetails;
 using IDT.Boss.ServiceName.Api.Infrastructure.Configuration;
 using IDT.Boss.ServiceName.Api.Infrastructure.HealthCheck;
 using IDT.Boss.ServiceName.Api.Infrastructure.Swagger;
+using IDT.Boss.ServiceName.Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -69,6 +78,12 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
         private static IServiceCollection ConfigureHttpServices(this IServiceCollection services,
             IWebHostEnvironment environment, IConfiguration configuration)
         {
+            services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+                //options.LowercaseQueryStrings = true;
+            });
+            
             // add API controllers here
             services.AddControllers()
                 .AddJsonOptions(options =>
@@ -82,10 +97,15 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
             // configure Swagger Gen rules to generate API documentation
             services.ConfigureSwaggerGeneration();
 
-            // add health checks (default)
-            services.AddHealthChecks()
-                .AddAppOptics();
+            // configure error handling and return ProblemDetails standard object with details
+            services.AddProblemDetails(options => ConfigureProblemDetails(options, environment));
 
+            // add HealthCheck UI
+            services.AddHealthChecksUiConfiguration(configuration);
+            
+            // add health checks
+            services.AddHealthChecksConfiguration(configuration);
+            
             return services;
         }
 
@@ -153,6 +173,117 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
             });
 
             return services;
+        }
+        
+         /// <summary>
+        /// Configure settings to process errors inside the application and API in general to return ProblemDetail result.
+        /// </summary>
+        /// <param name="options">Options for ProblemDetails middleware.</param>
+        /// <param name="environment">Environment settings.</param>
+        /// <remarks>
+        /// More details and information provided by the links bellow:
+        /// 1. https://www.alexdresko.com/2019/08/30/problem-details-error-handling-net-core-3/
+        /// 2. https://tools.ietf.org/html/rfc7807 - standard for the ProblemDetails
+        /// 3. https://lurumad.github.io/problem-details-an-standard-way-for-specifying-errors-in-http-api-responses-asp.net-core
+        /// 4. https://andrewlock.net/handling-web-api-exceptions-with-problemdetails-middleware/
+        /// </remarks>
+        private static void ConfigureProblemDetails(ProblemDetailsOptions options, IWebHostEnvironment environment)
+        {
+            // TODO: add logic to map the exceptions to generate proper ProblemDetails object to report about error inside the API 
+            // TODO: configure and think better about return codes for all possible situations (4xx or 5xx)
+
+            // This is the default behavior; only include exception details in a local development environment.
+            options.IncludeExceptionDetails = (ctx, ex) => (environment.IsEnvironment("Local"));
+
+            // Map custom validation exception with validation errors in the pipeline (MediatR CQRS)
+            //options.Map<ValidationException>(exception => new ValidationProblemDetails(exception.Errors));
+            // options.Map<ValidationException>(exception =>
+            // {
+            //     var validationProblemDetails  = new ValidationProblemDetails(exception.Errors);
+            //     validationProblemDetails.Status = StatusCodes.Status422UnprocessableEntity;
+            //     return validationProblemDetails;
+            // });
+            
+            // This will map NotImplementedException to the 501 Not Implemented status code.
+            options.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
+
+            // This will map HttpRequestException to the 503 Service Unavailable status code.
+            options.MapToStatusCode<HttpRequestException>(StatusCodes.Status503ServiceUnavailable);
+
+            // Because exceptions are handled polymorphically, this will act as a "catch all" mapping, which is why it's added last.
+            // If an exception other than NotImplementedException and HttpRequestException is thrown, this will handle it.
+            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+        }
+        
+        /// <summary>
+        /// Adds the health checks UI configuration.
+        /// </summary>
+        /// <param name="services">Services collection.</param>
+        /// <param name="configuration">Application configuration.</param>
+        private static void AddHealthChecksUiConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            var healthCheckConfig = configuration.GetHealthCheckConfiguration();
+
+            if (healthCheckConfig.HealthCheckUiEnabled)
+            {
+                services
+                    .AddHealthChecksUI(opt =>
+                    {
+                        opt.SetHeaderText(healthCheckConfig.HeaderText);
+                        opt.SetEvaluationTimeInSeconds(healthCheckConfig.EvaluationTimeInSeconds);
+                        opt.MaximumHistoryEntriesPerEndpoint(healthCheckConfig.MaximumHistoryEntriesPerEndpoint);
+                        opt.SetApiMaxActiveRequests(1);
+                        opt.AddHealthCheckEndpoint("All", GenerateHealthCheckUrl(configuration, "/health"));
+                        opt.AddHealthCheckEndpoint("Liveness", GenerateHealthCheckUrl(configuration, "/health/live"));
+                        opt.AddHealthCheckEndpoint("Readiness", GenerateHealthCheckUrl(configuration, "/health/ready"));
+                    })
+                    .AddInMemoryStorage();
+            }
+        }
+
+        private static string GenerateHealthCheckUrl(IConfiguration configuration, string url)
+        {
+            var urlsForApplication = configuration["ASPNETCORE_URLS"];
+            if (!string.IsNullOrEmpty(urlsForApplication))
+            {
+                var urls = urlsForApplication.Split(';');
+                var uris = urls.Select(url => Regex.Replace(url,
+                        @"^(?<scheme>https?):\/\/((\+)|(\*)|(0.0.0.0))(?=[\:\/]|$)", "${scheme}://localhost"))
+                    .Select(uri => new Uri(uri, UriKind.Absolute)).ToArray();
+                var httpEndpoint = uris.FirstOrDefault(uri => uri.Scheme == "http");
+                var httpsEndpoint = uris.FirstOrDefault(uri => uri.Scheme == "https");
+
+                string fullUrl = url;
+                if (httpEndpoint != null) // Create an HTTP healthcheck endpoint
+                {
+                    fullUrl = new UriBuilder(httpEndpoint.Scheme, httpEndpoint.Host, httpEndpoint.Port, url).ToString();
+                }
+                else if (httpsEndpoint != null) // Create an HTTPS healthcheck endpoint
+                {
+                    fullUrl = new UriBuilder(httpsEndpoint.Scheme, httpsEndpoint.Host, httpsEndpoint.Port, url).ToString();
+                }
+
+                return fullUrl;
+            }
+
+            return url;
+        }
+
+        /// <summary>
+        /// Add the health checks configuration and entries.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="configuration">Application configuration.</param>
+        /// <returns>Returns <see cref="IHealthChecksBuilder"/>.</returns>
+        private static IHealthChecksBuilder AddHealthChecksConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            // TODO: add here Debit health check later!
+
+            var builder = services.AddHealthChecks()
+                .AddAppOptics(HealthStatus.Unhealthy, tags: new[] {"ready", "monitoring"})
+                .AddMemoryHealthCheck(HealthStatus.Degraded, new[] {"monitoring"});
+            
+            return builder;
         }
     }
 }

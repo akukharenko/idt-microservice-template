@@ -1,5 +1,6 @@
 ﻿using IDT.Boss.ServiceName.Api.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -46,6 +47,27 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
         public static IApplicationBuilder ConfigureSerilog(this IApplicationBuilder app)
         {
             app.UseSerilogRequestLogging(options => { options.EnrichDiagnosticContext = LogHelper.EnrichFromRequest; });
+
+            return app;
+        }
+        
+        /// <summary>
+        /// Configure application to work after the load balancers and proxies.
+        /// </summary>
+        /// <param name="app">Application builder.</param>
+        /// <returns>Returns updated object with application builder.</returns>
+        /// <remarks>
+        /// See details here: https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-5.0
+        /// </remarks>
+        public static IApplicationBuilder ConfigureForwarderOptions(this IApplicationBuilder app)
+        {
+            var forwardedHeadersOptions = new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            };
+            forwardedHeadersOptions.KnownProxies.Clear();
+            forwardedHeadersOptions.KnownNetworks.Clear();
+            app.UseForwardedHeaders(forwardedHeadersOptions);
 
             return app;
         }

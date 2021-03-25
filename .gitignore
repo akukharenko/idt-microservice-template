@@ -363,3 +363,6 @@ FodyWeavers.xsd
 
 # JetBrains IDEs
 .idea/
+
+# Logs from Seq running locally
+.logs/

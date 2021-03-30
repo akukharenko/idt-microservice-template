@@ -29,7 +29,7 @@ namespace IDT.Boss.ServiceName.Common.Extensions
         /// If null, the root configuration will be used to configure the options.
         /// </param>
         /// <returns>The dependency injection container.</returns>
-        public static IServiceCollection AddApplicationOptions<TOptions>(
+        private static IServiceCollection AddApplicationOptions<TOptions>(
             this IServiceCollection services,
             string key = null)
             where TOptions : class

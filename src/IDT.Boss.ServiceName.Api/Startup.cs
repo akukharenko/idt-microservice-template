@@ -1,15 +1,11 @@
 using AppOptics.Instrumentation;
-using HealthChecks.UI.Client;
 using IDT.Boss.ServiceName.Api.Infrastructure.Extensions;
 using IDT.Boss.ServiceName.Common.Extensions;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace IDT.Boss.ServiceName.Api
 {
@@ -74,52 +70,9 @@ namespace IDT.Boss.ServiceName.Api
             {
                 // add controllers endpoints
                 endpoints.MapControllers();
-
-                if (healthCheckConfig.HealthCheckUiEnabled)
-                {
-                    // add Health Check UI
-                    endpoints.MapHealthChecksUI(config =>
-                    {
-                        config.AddCustomStylesheet("wwwroot/styles/healthcheck-style.css");
-                        config.UIPath = "/healthcheck-dashboard";
-                    });
-                }
                 
-                // add HealthCheck simple endpoint - for AWS Load Balancer and ECS deployment Blue/Green
-                endpoints.MapHealthChecks("/healthcheck", new HealthCheckOptions
-                {
-                    Predicate = (check) => check.Tags.Contains("ready")
-                });
-
-                // all health checks here with details
-                endpoints.MapHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-
-                // add custom health checks
-                // Readiness endpoint
-                endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions
-                {
-                    ResultStatusCodes =
-                    {
-                        [HealthStatus.Healthy] = StatusCodes.Status200OK,
-                        [HealthStatus.Degraded] = StatusCodes.Status500InternalServerError,
-                        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
-                    },
-                    Predicate = (check) => check.Tags.Contains("ready"),
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
-                    AllowCachingResponses = false
-                });
-
-                // Liveness endpoint
-                endpoints.MapHealthChecks("/health/live", new HealthCheckOptions
-                {
-                    Predicate = (check) => !check.Tags.Contains("ready"),
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
-                    AllowCachingResponses = false
-                });
+                // add health checks endpoints and configurations
+                endpoints.AddHealthcheckEndpoints(healthCheckConfig);
             });
         }
     }

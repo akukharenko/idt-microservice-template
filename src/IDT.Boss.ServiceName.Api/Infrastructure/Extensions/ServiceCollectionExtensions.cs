@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -64,7 +63,8 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
         private static IServiceCollection AddExternalServices(this IServiceCollection services)
         {
             // TODO: register list of the dependencies here!
-
+            services.AddConfiguration();
+            
             return services;
         }
 

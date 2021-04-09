@@ -17,6 +17,8 @@ namespace IDT.Boss.ServiceName.Common.Extensions
         public static void AddConfiguration(this IServiceCollection services)
         {
             services.AddApplicationOptions<HealthCheckOptions>(nameof(HealthCheckOptions));
+            
+            // load options from the Secrets Manager
         }
         
         /// <summary>

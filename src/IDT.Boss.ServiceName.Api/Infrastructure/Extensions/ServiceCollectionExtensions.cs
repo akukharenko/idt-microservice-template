@@ -94,6 +94,9 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
             // add API versions
             services.ConfigureApiVersions();
 
+            // add support for the integration with IHttpContextAccessor
+            services.AddHttpContextAccessor();
+            
             // configure Swagger Gen rules to generate API documentation
             services.ConfigureSwaggerGeneration();
 

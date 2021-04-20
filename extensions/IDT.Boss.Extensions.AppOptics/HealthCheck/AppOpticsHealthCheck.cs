@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AppOptics.Instrumentation;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace IDT.Boss.ServiceName.Api.Infrastructure.HealthCheck
+namespace IDT.Boss.Extensions.AppOptics.HealthCheck
 {
     /// <summary>
     /// Custom health check for the AppOptics agent.

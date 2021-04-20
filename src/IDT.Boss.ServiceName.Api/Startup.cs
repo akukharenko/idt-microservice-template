@@ -1,4 +1,5 @@
-using AppOptics.Instrumentation;
+using Hellang.Middleware.ProblemDetails;
+using IDT.Boss.Extensions.AppOptics.Extensions;
 using IDT.Boss.ServiceName.Api.Infrastructure.Extensions;
 using IDT.Boss.ServiceName.Common.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -49,7 +50,10 @@ namespace IDT.Boss.ServiceName.Api
             // app.UseHttpsRedirection();
             
             // add SolarWinds AppOptics monitoring
-            app.UseAppopticsApm();
+            app.UseAppOptics();
+            
+            // Add using ProblemDetail middleware to handle errors and use RFC-7807 standard
+            app.UseProblemDetails();
 
             // configure Swagger UI
             app.ConfigureSwagger(apiProvider);

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Hellang.Middleware.ProblemDetails;
+using IDT.Boss.Extensions.AppOptics.Extensions;
 using IDT.Boss.ServiceName.Api.Infrastructure.Configuration;
 using IDT.Boss.ServiceName.Api.Infrastructure.HealthCheck;
 using IDT.Boss.ServiceName.Api.Infrastructure.Swagger;

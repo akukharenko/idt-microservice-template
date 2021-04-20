@@ -9,13 +9,6 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.HealthCheck
     /// </summary>
     public static class HealthCheckExtensions
     {
-        public static IHealthChecksBuilder AddAppOptics(this IHealthChecksBuilder builder, HealthStatus failureStatus,
-            IEnumerable<string> tags = default)
-        {
-            return builder.Add(new HealthCheckRegistration(AppOpticsHealthCheck.Name,
-                new AppOpticsHealthCheck(), failureStatus, tags));
-        }
-
         public static IHealthChecksBuilder AddMemoryHealthCheck(this IHealthChecksBuilder builder, HealthStatus? failureStatus = null,
             IEnumerable<string> tags = default, long? thresholdInBytes = null)
         {

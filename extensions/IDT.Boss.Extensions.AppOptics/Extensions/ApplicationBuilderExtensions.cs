@@ -16,7 +16,10 @@ namespace IDT.Boss.Extensions.AppOptics.Extensions
         /// <returns>Returns updated builder.</returns>
         public static IApplicationBuilder UseAppOptics(this IApplicationBuilder builder)
         {
+            // add default middleware for AppOptics
             builder.UseAppopticsApm();
+            
+            // add additional custom middleware from the application
             builder.UseAppOpticsScope();
 
             return builder;

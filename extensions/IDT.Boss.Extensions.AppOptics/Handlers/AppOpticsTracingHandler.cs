@@ -34,19 +34,19 @@ namespace IDT.Boss.Extensions.AppOptics.Handlers
             Tracer tracer = null;
             try
             {
-                tracer = Tracer.TraceMethod(request.RequestUri.Host,
+                tracer = Tracer.TraceMethod(request.RequestUri?.Host,
                     new Dictionary<string, object>()
                     {
                         {"action", "HttpClient request"},
                         {"method", request.Method},
-                        {"request_uri", $"{request.RequestUri.Scheme}://{request.RequestUri.Authority}{request.RequestUri.AbsolutePath}"},
+                        {"request_uri", $"{request.RequestUri?.Scheme}://{request.RequestUri?.Authority}{request.RequestUri?.AbsolutePath}"},
                         {"headers", request.Headers},
-                        {"properties", JsonSerializer.Serialize(request.Properties)}
+                        {"properties", JsonSerializer.Serialize(request.Options)}
                     });
 
                 request.Headers.Add("X-Trace", Trace.GetCurrentTraceId());
 
-                _logger.LogInformation($"Tracing request to the {request.RequestUri.Host} with traceId = {Trace.GetCurrentTraceId()}");
+                _logger.LogInformation($"Tracing request to the {request.RequestUri?.Host} with traceId = {Trace.GetCurrentTraceId()}");
 
                 return await base.SendAsync(request, cancellationToken);
             }

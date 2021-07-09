@@ -21,7 +21,9 @@ namespace IDT.Boss.ServiceName.Api
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .UseKestrel(server => server.AddServerHeader = false)
+                        .UseStartup<Startup>();
                 });
     }
 }

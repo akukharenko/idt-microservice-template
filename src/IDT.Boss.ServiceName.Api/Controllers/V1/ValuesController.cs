@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace IDT.Boss.ServiceName.Api.Controllers
+namespace IDT.Boss.ServiceName.Api.Controllers.V1
 {
     /// <summary>
     /// Sample controller to work with test values.

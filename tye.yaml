@@ -16,3 +16,5 @@ services:
   env:
     - name: ASPNETCORE_ENVIRONMENT
       value: Local
+    - name: APPOPTICS_SERVICE_KEY
+      value: IXDxTzxXVf7JwLaYVv1wWyPOtgkO9DaOBh4joGdYtrIRE1wwyvkpv0HZmHxWzYK12yKpvQE:boss-service-name-local

@@ -9,26 +9,26 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.HealthCheck
 {
     public sealed class MemoryCheckOptions
     {
-        // Failure threshold (in bytes)
+        // Failure threshold (in bytes) - default 1 Gb.
         public long Threshold { get; set; } = 1024L * 1024L * 1024L;
     }
-    
+
     public sealed class MemoryHealthCheck : IHealthCheck
     {
         public const string Name = "memory";
         private readonly IOptionsMonitor<MemoryCheckOptions> _options;
-    
+
         public MemoryHealthCheck(IOptionsMonitor<MemoryCheckOptions> options)
         {
             _options = options;
         }
-    
+
         public Task<HealthCheckResult> CheckHealthAsync(
-            HealthCheckContext context, 
+            HealthCheckContext context,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var options = _options.Get(context.Registration.Name);
-    
+
             // Include GC information in the reported diagnostics.
             var allocated = GC.GetTotalMemory(forceFullCollection: false);
             var data = new Dictionary<string, object>()
@@ -38,9 +38,9 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.HealthCheck
                 { "Gen1Collections", GC.CollectionCount(1) },
                 { "Gen2Collections", GC.CollectionCount(2) },
             };
-            var status = (allocated < options.Threshold) ? 
+            var status = (allocated < options.Threshold) ?
                 HealthStatus.Healthy : context.Registration.FailureStatus;
-    
+
             return Task.FromResult(new HealthCheckResult(
                 status,
                 description: "Reports degraded status if allocated bytes " +

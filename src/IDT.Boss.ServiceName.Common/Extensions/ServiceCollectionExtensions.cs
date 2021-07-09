@@ -17,10 +17,8 @@ namespace IDT.Boss.ServiceName.Common.Extensions
         public static void AddConfiguration(this IServiceCollection services)
         {
             services.AddApplicationOptions<HealthCheckOptions>(nameof(HealthCheckOptions));
-            
-            // load options from the Secrets Manager
         }
-        
+
         /// <summary>
         /// Configures and validates options.
         /// </summary>
@@ -51,7 +49,7 @@ namespace IDT.Boss.ServiceName.Common.Extensions
             return services;
         }
     }
-    
+
     /// <summary>
     /// A configuration that validates options using data annotations.
     /// </summary>
@@ -94,7 +92,7 @@ namespace IDT.Boss.ServiceName.Common.Extensions
             return ValidateOptionsResult.Fail(errors);
         }
     }
-    
+
     /// <summary>
     /// Automatically binds configs to options.
     /// </summary>

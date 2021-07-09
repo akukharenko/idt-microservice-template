@@ -7,10 +7,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace IDT.Boss.ServiceName.Api
 {
-    public class Startup
+    /// <summary>
+    /// Startup class to configure the services web app middleware.
+    /// </summary>
+    public sealed class Startup
     {
         /// <summary>
         /// Configuration for application loaded from the files.
@@ -39,19 +43,25 @@ namespace IDT.Boss.ServiceName.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider apiProvider)
         {
             var healthCheckConfig = Configuration.GetHealthCheckConfiguration();
-            
+
             // configure Forwarder headers for proxies and Load Balancers
             app.ConfigureForwarderOptions();
-            
-            // Use HSTS default settings (default for 30 days)
-            app.UseHsts();
-            
+
+            if (!env.IsEnvironment("Local"))
+            {
+                // Use HSTS default settings (default for 30 days)
+                // app.UseHsts();
+
+                // custom configuration for security headers (HSTS for 60 days)
+                app.ConfigureSecurityHeaders();
+            }
+
             // redirect to the HTTPS connection
-            // app.UseHttpsRedirection();
-            
+            app.UseHttpsRedirection();
+
             // add SolarWinds AppOptics monitoring
             app.UseAppOptics();
-            
+
             // Add using ProblemDetail middleware to handle errors and use RFC-7807 standard
             app.UseProblemDetails();
 
@@ -63,10 +73,10 @@ namespace IDT.Boss.ServiceName.Api
 
             // use default files
             app.UseDefaultFiles();
-            
+
             // allow to use static files
             app.UseStaticFiles();
-            
+
             // Use routing middleware to handle requests to the controllers
             app.UseRouting();
 
@@ -74,7 +84,7 @@ namespace IDT.Boss.ServiceName.Api
             {
                 // add controllers endpoints
                 endpoints.MapControllers();
-                
+
                 // add health checks endpoints and configurations
                 endpoints.AddHealthcheckEndpoints(healthCheckConfig);
             });

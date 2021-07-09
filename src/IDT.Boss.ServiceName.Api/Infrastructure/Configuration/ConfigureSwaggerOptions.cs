@@ -43,8 +43,6 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Configuration
         /// <returns>Returns API info object with data.</returns>
         static OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
         {
-            // TODO: configure value for API description! (here or wih Constants)
-
             var info = new OpenApiInfo
             {
                 Title = Constants.ApiName,
@@ -57,8 +55,8 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Configuration
                 },
                 License = new OpenApiLicense
                 {
-                    Name = "Copyright (c) 2021, IDT",
-                    Url = new Uri("http://www.idt.net")
+                    Name = Constants.Copyright,
+                    Url = new Uri(Constants.IdtUrl)
                 }
             };
 

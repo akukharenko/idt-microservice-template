@@ -50,7 +50,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
 
             return app;
         }
-        
+
         /// <summary>
         /// Configure application to work after the load balancers and proxies.
         /// </summary>
@@ -70,6 +70,88 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
             app.UseForwardedHeaders(forwardedHeadersOptions);
 
             return app;
+        }
+
+        /// <summary>
+        /// Configure Security Headers for the web/api application.
+        /// </summary>
+        /// <param name="app">Application builder.</param>
+        /// <returns>Returns updated builder.</returns>
+        /// <remarks>
+        /// More details here: https://github.com/andrewlock/NetEscapades.AspNetCore.SecurityHeaders
+        /// And here: https://andrewlock.net/adding-default-security-headers-in-asp-net-core/
+        /// </remarks>
+        public static IApplicationBuilder ConfigureSecurityHeaders(this IApplicationBuilder app)
+        {
+            var policyHeaders = new HeaderPolicyCollection()
+                .AddDefaultSecurityHeaders()
+                .AddStrictTransportSecurityMaxAgeIncludeSubDomains(maxAgeInSeconds: 60 * 60 * 24 * 60) // 60 days in seconds
+                .AddPermissionsPolicy(builder =>
+                {
+                    builder.AddDefaultPermissionsPolicies();
+                })
+                .RemoveCustomHeader("X-Powered-By");
+
+            app.UseSecurityHeaders(policyHeaders);
+
+            return app;
+        }
+
+        private static void AddDefaultPermissionsPolicies(this PermissionsPolicyBuilder builder)
+        {
+            builder.AddAccelerometer() // accelerometer 'none'
+                .None();
+
+            // non supported in Google
+            // builder.AddAmbientLightSensor() // ambient-light-sensor 'none'
+            //     .None();
+
+            builder.AddAutoplay() // autoplay 'none'
+                .None();
+
+            builder.AddCamera() // camera 'none'
+                .None();
+
+            builder.AddEncryptedMedia() // encrypted-media 'none'
+                .None();
+
+            builder.AddFullscreen() // fullscreen *
+                .All();
+
+            builder.AddGeolocation() // geolocation 'none'
+                .None();
+
+            builder.AddGyroscope() // gyroscope 'none'
+                .None();
+
+            builder.AddMagnetometer() // magnetometer 'none'
+                .None();
+
+            builder.AddMicrophone() // microphone 'none'
+                .None();
+
+            builder.AddMidi() // midi 'none'
+                .None();
+
+            builder.AddPayment() // payment 'none'
+                .None();
+
+            builder.AddPictureInPicture() // picture-in-picture 'none'
+                .None();
+
+            // non supported in Google
+            // builder.AddSpeaker() // speaker 'none'
+            //     .None();
+
+            builder.AddSyncXHR() // sync-xhr 'none'
+                .None();
+
+            builder.AddUsb() // usb 'none'
+                .None();
+
+            // non supported in Google
+            // builder.AddVR() // vr 'none'
+            //     .None();
         }
     }
 }

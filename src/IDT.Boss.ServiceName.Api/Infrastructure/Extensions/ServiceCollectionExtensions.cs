@@ -9,6 +9,7 @@ using IDT.Boss.Extensions.AppOptics.Extensions;
 using IDT.Boss.ServiceName.Api.Infrastructure.Configuration;
 using IDT.Boss.ServiceName.Api.Infrastructure.HealthCheck;
 using IDT.Boss.ServiceName.Api.Infrastructure.Swagger;
+using IDT.Boss.ServiceName.Application;
 using IDT.Boss.ServiceName.Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -65,7 +66,8 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
         {
             // TODO: register list of the dependencies here!
             services.AddConfiguration();
-            
+            services.AddApplication();
+
             return services;
         }
 
@@ -84,7 +86,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
                 options.LowercaseUrls = true;
                 //options.LowercaseQueryStrings = true;
             });
-            
+
             // add API controllers here
             services.AddControllers()
                 .AddJsonOptions(options =>
@@ -97,7 +99,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
 
             // add support for the integration with IHttpContextAccessor
             services.AddHttpContextAccessor();
-            
+
             // configure Swagger Gen rules to generate API documentation
             services.ConfigureSwaggerGeneration();
 
@@ -106,10 +108,10 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
 
             // add HealthCheck UI
             services.AddHealthChecksUiConfiguration(configuration);
-            
+
             // add health checks
             services.AddHealthChecksConfiguration(configuration);
-            
+
             return services;
         }
 
@@ -168,6 +170,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
                 var xmlDocFiles = new[]
                 {
                     "IDT.Boss.ServiceName.Api.xml",
+                    "IDT.Boss.ServiceName.Application.xml"
                 };
                 foreach (var xmlDocFile in xmlDocFiles)
                 {
@@ -178,7 +181,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
 
             return services;
         }
-        
+
          /// <summary>
         /// Configure settings to process errors inside the application and API in general to return ProblemDetail result.
         /// </summary>
@@ -193,7 +196,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
         /// </remarks>
         private static void ConfigureProblemDetails(ProblemDetailsOptions options, IWebHostEnvironment environment)
         {
-            // TODO: add logic to map the exceptions to generate proper ProblemDetails object to report about error inside the API 
+            // TODO: add logic to map the exceptions to generate proper ProblemDetails object to report about error inside the API
             // TODO: configure and think better about return codes for all possible situations (4xx or 5xx)
 
             // This is the default behavior; only include exception details in a local development environment.
@@ -207,7 +210,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
             //     validationProblemDetails.Status = StatusCodes.Status422UnprocessableEntity;
             //     return validationProblemDetails;
             // });
-            
+
             // This will map NotImplementedException to the 501 Not Implemented status code.
             options.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
 
@@ -218,7 +221,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
             // If an exception other than NotImplementedException and HttpRequestException is thrown, this will handle it.
             options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
-        
+
         /// <summary>
         /// Adds the health checks UI configuration.
         /// </summary>
@@ -281,12 +284,10 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
         /// <returns>Returns <see cref="IHealthChecksBuilder"/>.</returns>
         private static IHealthChecksBuilder AddHealthChecksConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            // TODO: add here Debit health check later!
-
             var builder = services.AddHealthChecks()
                 .AddAppOptics(HealthStatus.Unhealthy, tags: new[] {"ready", "monitoring"})
                 .AddMemoryHealthCheck(HealthStatus.Degraded, new[] {"monitoring"});
-            
+
             return builder;
         }
     }

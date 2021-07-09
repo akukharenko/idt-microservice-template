@@ -15,10 +15,12 @@
       <PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.1" />
       <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
       <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="5.0.1" />
+      <PackageReference Include="AutoMapper" Version="10.1.1" />
       <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.4.0" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
       <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+      <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.15.0" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
       <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
       <PackageReference Include="Serilog" Version="2.10.0" />
@@ -28,12 +30,12 @@
       <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
       <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-      <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+      <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
       <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
       <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="1.1.3" />
       <PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
-      <PackageReference Include="Serilog.Exceptions" Version="6.1.0" />
-      <PackageReference Include="Serilog.Expressions" Version="2.0.0" />
+      <PackageReference Include="Serilog.Exceptions" Version="7.0.0" />
+      <PackageReference Include="Serilog.Expressions" Version="3.2.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -54,6 +56,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\extensions\IDT.Boss.Extensions.AppOptics\IDT.Boss.Extensions.AppOptics.csproj" />
       <ProjectReference Include="..\..\extensions\Serilog.Enrichers.Custom\Serilog.Enrichers.Custom.csproj" />
+      <ProjectReference Include="..\IDT.Boss.ServiceName.Application\IDT.Boss.ServiceName.Application.csproj" />
       <ProjectReference Include="..\IDT.Boss.ServiceName.Common\IDT.Boss.ServiceName.Common.csproj" />
     </ItemGroup>
 

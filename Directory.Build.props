@@ -1,0 +1,8 @@
+<Project>
+    <PropertyGroup>
+        <Product>Boss Service Template</Product>
+        <Company>IDT</Company>
+        <Copyright>Copyright (c) IDT 2021</Copyright>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+    </PropertyGroup>
+</Project>

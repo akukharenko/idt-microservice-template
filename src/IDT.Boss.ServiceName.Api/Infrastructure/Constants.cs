@@ -1,30 +1,40 @@
-﻿namespace IDT.Boss.ServiceName.Api.Infrastructure
-{
-    // TODO: use this or remove to use values inline
+﻿using System;
 
+namespace IDT.Boss.ServiceName.Api.Infrastructure
+{
     /// <summary>
     /// Some constants for the API.
     /// </summary>
-    public static class Constants
+    public readonly struct Constants
     {
         /// <summary>
         /// Name of the API - to use on OpenAPI specification.
         /// </summary>
-        public static string ApiName = "Service Name API";
+        public const string ApiName = "Service Name API";
 
         /// <summary>
         /// Description for the API - to use on OpenAPI specification.
         /// </summary>
-        public static string ApiDescription = "Simple service with API";
+        public const string ApiDescription = "Simple service with API";
 
         /// <summary>
         /// Author of the API.
         /// </summary>
-        public static string ApiAuthor = "IDT RCS";
-        
+        public const string ApiAuthor = "IDT RCS";
+
         /// <summary>
         /// Email of teh author (company email).
         /// </summary>
-        public static string ApiAuthorEmail = "rcs@idt.net";
+        public const string ApiAuthorEmail = "rcs@idt.net";
+
+        /// <summary>
+        /// Copyright for the Swagger.
+        /// </summary>
+        public static readonly string Copyright = $"Copyright (c) {DateTime.Today.Year}, IDT";
+
+        /// <summary>
+        /// Url to the company main web site.
+        /// </summary>
+        public const string IdtUrl = "https://www.idt.net/";
     }
 }

@@ -10,7 +10,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.HealthCheck
     public sealed class MemoryCheckOptions
     {
         // Failure threshold (in bytes) - default 1 Gb.
-        public long Threshold { get; set; } = 1024L * 1024L * 1024L;
+        public long Threshold { get; set; } = 1024L * 1024L * 256L;
     }
 
     public sealed class MemoryHealthCheck : IHealthCheck

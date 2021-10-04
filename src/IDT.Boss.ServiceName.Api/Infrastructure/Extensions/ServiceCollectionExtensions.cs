@@ -286,7 +286,7 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
         {
             var builder = services.AddHealthChecks()
                 .AddAppOptics(HealthStatus.Unhealthy, tags: new[] {"ready", "monitoring"})
-                .AddMemoryHealthCheck(HealthStatus.Degraded, new[] {"monitoring"});
+                .AddMemoryHealthCheck(HealthStatus.Degraded, new[] {"internal", "monitoring"});
 
             return builder;
         }

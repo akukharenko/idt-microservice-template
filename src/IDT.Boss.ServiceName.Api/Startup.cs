@@ -80,6 +80,7 @@ namespace IDT.Boss.ServiceName.Api
             // Use routing middleware to handle requests to the controllers
             app.UseRouting();
 
+            // configure endpoints routing
             app.UseEndpoints(endpoints =>
             {
                 // add controllers endpoints

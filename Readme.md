@@ -17,7 +17,7 @@ TBD
 
 ## Jenkins
 
-TBD
+The Jenkins pipeline - [link here]
 
 ## Build Process for Local Development
 

@@ -35,4 +35,4 @@ dockerImage: "mcr.microsoft.com/dotnet/sdk:5.0-alpine"
 dotnetBuildParams: "-c Release"
 
 ## sonar scanner version t be installed as dotnet global tool
-sonarScannerVersion: "5.2.1"
+sonarScannerVersion: "5.4"

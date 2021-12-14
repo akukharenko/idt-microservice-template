@@ -46,7 +46,11 @@ namespace IDT.Boss.ServiceName.Api.Infrastructure.Extensions
         /// <returns>Returns updated object with application builder.</returns>
         public static IApplicationBuilder ConfigureSerilog(this IApplicationBuilder app)
         {
-            app.UseSerilogRequestLogging(options => { options.EnrichDiagnosticContext = LogHelper.EnrichFromRequest; });
+            app.UseSerilogRequestLogging(options =>
+            {
+                options.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
+                options.GetLevel = LogHelper.ExcludeHealthChecks; // Use the custom level to filter the Health Checks from logs (information messages)
+            });
 
             return app;
         }
